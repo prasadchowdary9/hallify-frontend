@@ -158,7 +158,7 @@ const Venues = () => {
                     <SelectValue placeholder="All Cities" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Cities</SelectItem>
+                    <SelectItem value="all">All Cities</SelectItem>
                     {cities.map((city) => (
                       <SelectItem key={city} value={city}>{city}</SelectItem>
                     ))}
@@ -245,7 +245,7 @@ const Venues = () => {
                         <SelectValue placeholder="All Cities" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Cities</SelectItem>
+                        <SelectItem value="all">All Cities</SelectItem>
                         {cities.map((city) => (
                           <SelectItem key={city} value={city}>{city}</SelectItem>
                         ))}

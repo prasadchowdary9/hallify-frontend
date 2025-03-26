@@ -68,7 +68,7 @@ const SearchBar = () => {
               <SelectValue placeholder="Select city" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Cities</SelectItem>
+              <SelectItem value="all">All Cities</SelectItem>
               {cities.map((cityName) => (
                 <SelectItem key={cityName} value={cityName}>
                   {cityName}

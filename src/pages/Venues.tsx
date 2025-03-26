@@ -22,6 +22,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 
 const Venues = () => {
@@ -258,10 +259,9 @@ const Venues = () => {
                     </div>
                   </div>
                   
-                  <Button onClick={() => {
-                    handleFilter();
-                    document.querySelector('[data-radix-collection-item]')?.click(); // Close the sheet
-                  }} className="w-full">Apply Filters</Button>
+                  <SheetClose asChild>
+                    <Button onClick={handleFilter} className="w-full">Apply Filters</Button>
+                  </SheetClose>
                 </div>
               </SheetContent>
             </Sheet>

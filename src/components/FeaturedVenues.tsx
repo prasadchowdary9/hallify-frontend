@@ -15,8 +15,8 @@ const FeaturedVenues = () => {
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="mb-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-fade-in">Featured Venues</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto animate-fade-in">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Venues</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
             Discover our handpicked selection of premium venues for your next event
           </p>
         </div>
@@ -24,7 +24,7 @@ const FeaturedVenues = () => {
         {/* Venue Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredVenues.map((venue, index) => (
-            <div key={venue.id} className="animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+            <div key={venue.id}>
               <VenueCard venue={venue} index={index} />
             </div>
           ))}

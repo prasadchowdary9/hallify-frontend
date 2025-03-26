@@ -1,0 +1,82 @@
+
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Search, Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu when navigating
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-6 py-4 ${
+        isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+      }`}
+    >
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="text-2xl font-semibold tracking-tight animate-fade-in"
+          >
+            Venue<span className="text-blue-500">Hub</span>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-10">
+            <Link to="/" className="text-gray-700 hover:text-blue-500 transition-colors">Home</Link>
+            <Link to="/venues" className="text-gray-700 hover:text-blue-500 transition-colors">Venues</Link>
+            <Link to="/booking" className="text-gray-700 hover:text-blue-500 transition-colors">Book Now</Link>
+            <Link to="/dashboard" className="text-gray-700 hover:text-blue-500 transition-colors">Dashboard</Link>
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center space-x-4 animate-fade-in">
+            <Button variant="outline" size="sm" className="animate-slide-down" style={{ animationDelay: '100ms' }}>
+              <Search className="h-4 w-4 mr-2" /> Find Venue
+            </Button>
+            <Button size="sm" className="animate-slide-down" style={{ animationDelay: '200ms' }}>Book Now</Button>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-gray-700 hover:text-blue-500 transition-colors"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden pt-5 pb-3 space-y-3 animate-fade-in">
+            <Link to="/" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Home</Link>
+            <Link to="/venues" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Venues</Link>
+            <Link to="/booking" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Book Now</Link>
+            <Link to="/dashboard" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Dashboard</Link>
+            <Button className="w-full mt-4">Book Now</Button>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

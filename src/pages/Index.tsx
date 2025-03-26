@@ -1,7 +1,6 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import Hero from '@/components/Hero';
 import SearchBar from '@/components/SearchBar';
 import FeaturedVenues from '@/components/FeaturedVenues';
@@ -55,16 +54,30 @@ const Index = () => {
   
   // Animation for staggered elements
   const controls = useAnimation();
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  });
+  const featuresRef = useRef(null);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (inView) {
-      controls.start('visible');
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          controls.start('visible');
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (featuresRef.current) {
+      observer.observe(featuresRef.current);
     }
-  }, [controls, inView]);
+
+    return () => {
+      if (featuresRef.current) {
+        observer.unobserve(featuresRef.current);
+      }
+    };
+  }, [controls]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -134,12 +147,12 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-20 px-6" ref={ref}>
+      <section className="py-20 px-6" ref={featuresRef}>
         <div className="container mx-auto">
           <motion.div 
             variants={containerVariants}
             initial="hidden"
-            animate={controls}
+            animate={inView ? 'visible' : 'hidden'}
             className="grid grid-cols-1 md:grid-cols-2 gap-20"
           >
             {/* Left Column - Features */}

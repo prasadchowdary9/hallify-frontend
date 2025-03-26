@@ -18,6 +18,14 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index = 0 }) => {
     navigate(`/venues/${venue.id}`);
   };
 
+  const formatIndianRupee = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(price);
+  };
+
   return (
     <div 
       className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 ease-in-out hover:-translate-y-1"
@@ -34,13 +42,13 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index = 0 }) => {
         />
         
         {/* Floating Price Tag */}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold text-blue-600 shadow-sm">
-          ${venue.price.toLocaleString()}/day
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold text-orange-600 shadow-sm">
+          {formatIndianRupee(venue.price)}/day
         </div>
         
         {/* Featured Badge */}
         {venue.featured && (
-          <Badge className="absolute top-4 left-4 bg-blue-500 text-white border-none">
+          <Badge className="absolute top-4 left-4 bg-orange-500 text-white border-none">
             Featured
           </Badge>
         )}
@@ -57,14 +65,14 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index = 0 }) => {
           </div>
         </div>
         
-        <div className="flex items-center mb-3 text-gray-500">
-          <MapPin className="h-4 w-4 mr-1" />
+        <div className="flex items-center mb-2 text-gray-500">
+          <MapPin className="h-4 w-4 mr-1 text-orange-500" />
           <span className="text-sm">{venue.location}</span>
         </div>
         
         <div className="flex items-center mb-4 text-gray-500">
-          <Users className="h-4 w-4 mr-1" />
-          <span className="text-sm">Up to {venue.capacity} guests</span>
+          <Users className="h-4 w-4 mr-1 text-orange-500" />
+          <span className="text-sm">Up to {venue.capacity.toLocaleString()} guests</span>
         </div>
         
         <p className="text-gray-600 mb-5 line-clamp-2">{venue.description}</p>
@@ -74,7 +82,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index = 0 }) => {
             {venue.amenities.slice(0, 3).map((amenity, i) => (
               <span 
                 key={i} 
-                className="inline-block bg-gray-100 text-gray-700 rounded-full px-2 py-1 text-xs"
+                className="inline-block bg-orange-50 text-orange-700 rounded-full px-2 py-1 text-xs"
               >
                 {amenity}
               </span>
@@ -88,7 +96,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index = 0 }) => {
           
           <Button 
             size="sm" 
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out bg-orange-500 hover:bg-orange-600"
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/booking?venueId=${venue.id}`);

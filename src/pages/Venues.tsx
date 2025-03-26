@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Filter, Search, ArrowUpDown, Grid, List } from 'lucide-react';
-import { venues, Venue } from '@/lib/data';
+import { Filter, Search, ArrowUpDown, Grid, List, MapPin } from 'lucide-react';
+import { venues, Venue, getCities, searchVenues } from '@/lib/data';
 import VenueCard from '@/components/VenueCard';
 import SearchBar from '@/components/SearchBar';
 import { Button } from '@/components/ui/button';
@@ -29,51 +29,57 @@ const Venues = () => {
   const [searchParams] = useSearchParams();
   const [filteredVenues, setFilteredVenues] = useState<Venue[]>(venues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 300000]);
   const [capacity, setCapacity] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [amenities, setAmenities] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
   
   // Get all unique amenities from the venues
   const allAmenities = Array.from(
     new Set(venues.flatMap(venue => venue.amenities))
   ).sort();
 
+  // Get all cities
+  useEffect(() => {
+    setCities(getCities());
+  }, []);
+
   // Initialize with URL params if any
   useEffect(() => {
     const location = searchParams.get('location') || '';
+    const city = searchParams.get('city') || '';
     const guests = searchParams.get('guests') || '';
     
     setSearchQuery(location);
+    setSelectedCity(city);
     setCapacity(guests);
     
     // Apply initial filtering if search params exist
-    if (location || guests) {
-      filterVenues(location, guests, priceRange, amenities, sortBy);
+    if (location || city || guests) {
+      filterVenues(location, city, guests, priceRange, amenities, sortBy);
     }
   }, [searchParams]);
 
   const filterVenues = (
     query: string,
+    city: string,
     capacityStr: string,
     price: number[],
     selectedAmenities: string[],
     sort: string
   ) => {
-    const capacityNum = parseInt(capacityStr, 10);
+    // Use the search function from data.ts
+    let results = searchVenues(
+      query,
+      city || undefined,
+      capacityStr ? parseInt(capacityStr, 10) : undefined
+    );
     
-    // Filter function
-    let results = venues.filter(venue => {
-      // Search query filter
-      const matchesQuery = !query || 
-        venue.name.toLowerCase().includes(query.toLowerCase()) ||
-        venue.location.toLowerCase().includes(query.toLowerCase()) ||
-        venue.description.toLowerCase().includes(query.toLowerCase());
-      
-      // Capacity filter
-      const matchesCapacity = !capacityStr || venue.capacity >= capacityNum;
-      
+    // Apply additional filters
+    results = results.filter(venue => {
       // Price range filter
       const matchesPrice = venue.price >= price[0] && venue.price <= price[1];
       
@@ -81,7 +87,7 @@ const Venues = () => {
       const matchesAmenities = selectedAmenities.length === 0 || 
         selectedAmenities.every(amenity => venue.amenities.includes(amenity));
       
-      return matchesQuery && matchesCapacity && matchesPrice && matchesAmenities;
+      return matchesPrice && matchesAmenities;
     });
     
     // Sort results
@@ -108,7 +114,7 @@ const Venues = () => {
   };
 
   const handleFilter = () => {
-    filterVenues(searchQuery, capacity, priceRange, amenities, sortBy);
+    filterVenues(searchQuery, selectedCity, capacity, priceRange, amenities, sortBy);
   };
 
   const toggleAmenity = (amenity: string) => {
@@ -119,10 +125,18 @@ const Venues = () => {
     );
   };
 
+  const formatIndianRupee = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(price);
+  };
+
   return (
     <div className="min-h-screen pt-20">
       {/* Search Bar */}
-      <div className="bg-gray-50 py-8">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 py-8">
         <div className="container mx-auto px-6">
           <h1 className="text-3xl font-bold mb-6 animate-fade-in">Find Your Perfect Venue</h1>
           <SearchBar />
@@ -136,20 +150,36 @@ const Venues = () => {
             <div className="sticky top-24 bg-white rounded-xl shadow-md p-6">
               <h2 className="text-lg font-semibold mb-6">Filters</h2>
               
+              {/* City Filter */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium mb-3">City</h3>
+                <Select value={selectedCity} onValueChange={setSelectedCity}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All Cities" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All Cities</SelectItem>
+                    {cities.map((city) => (
+                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
               {/* Price Range */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-3">Price Range</h3>
                 <Slider
                   defaultValue={priceRange}
                   min={0}
-                  max={10000}
-                  step={100}
+                  max={300000}
+                  step={10000}
                   onValueChange={setPriceRange}
                   className="mb-2"
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">${priceRange[0]}</span>
-                  <span className="text-sm text-gray-600">${priceRange[1]}</span>
+                  <span className="text-sm text-gray-600">{formatIndianRupee(priceRange[0])}</span>
+                  <span className="text-sm text-gray-600">{formatIndianRupee(priceRange[1])}</span>
                 </div>
               </div>
               
@@ -188,7 +218,7 @@ const Venues = () => {
                 </div>
               </div>
               
-              <Button onClick={handleFilter} className="w-full">Apply Filters</Button>
+              <Button onClick={handleFilter} className="w-full bg-orange-500 hover:bg-orange-600">Apply Filters</Button>
             </div>
           </div>
           
@@ -207,20 +237,36 @@ const Venues = () => {
                 </SheetHeader>
                 {/* Mobile Filter Content - Same as desktop sidebar */}
                 <div className="mt-6">
+                  {/* City Filter */}
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium mb-3">City</h3>
+                    <Select value={selectedCity} onValueChange={setSelectedCity}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="All Cities" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All Cities</SelectItem>
+                        {cities.map((city) => (
+                          <SelectItem key={city} value={city}>{city}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
                   {/* Price Range */}
                   <div className="mb-6">
                     <h3 className="text-sm font-medium mb-3">Price Range</h3>
                     <Slider
                       defaultValue={priceRange}
                       min={0}
-                      max={10000}
-                      step={100}
+                      max={300000}
+                      step={10000}
                       onValueChange={setPriceRange}
                       className="mb-2"
                     />
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">${priceRange[0]}</span>
-                      <span className="text-sm text-gray-600">${priceRange[1]}</span>
+                      <span className="text-sm text-gray-600">{formatIndianRupee(priceRange[0])}</span>
+                      <span className="text-sm text-gray-600">{formatIndianRupee(priceRange[1])}</span>
                     </div>
                   </div>
                   
@@ -260,7 +306,7 @@ const Venues = () => {
                   </div>
                   
                   <SheetClose asChild>
-                    <Button onClick={handleFilter} className="w-full">Apply Filters</Button>
+                    <Button onClick={handleFilter} className="w-full bg-orange-500 hover:bg-orange-600">Apply Filters</Button>
                   </SheetClose>
                 </div>
               </SheetContent>
@@ -274,6 +320,7 @@ const Venues = () => {
               <div className="mb-4 sm:mb-0">
                 <h2 className="text-xl font-semibold">
                   {filteredVenues.length} {filteredVenues.length === 1 ? 'Venue' : 'Venues'} Found
+                  {selectedCity && <span className="ml-2 text-orange-600 flex items-center"><MapPin className="h-4 w-4 mr-1" />{selectedCity}</span>}
                 </h2>
               </div>
               
@@ -283,7 +330,7 @@ const Venues = () => {
                   value={sortBy}
                   onValueChange={(value) => {
                     setSortBy(value);
-                    filterVenues(searchQuery, capacity, priceRange, amenities, value);
+                    filterVenues(searchQuery, selectedCity, capacity, priceRange, amenities, value);
                   }}
                 >
                   <SelectTrigger className="w-full sm:w-[180px]">
@@ -301,13 +348,13 @@ const Venues = () => {
                 {/* View Toggle */}
                 <div className="hidden sm:flex border rounded-md overflow-hidden">
                   <button
-                    className={`p-2 ${viewMode === 'grid' ? 'bg-blue-50 text-blue-600' : 'bg-white text-gray-500'}`}
+                    className={`p-2 ${viewMode === 'grid' ? 'bg-orange-50 text-orange-600' : 'bg-white text-gray-500'}`}
                     onClick={() => setViewMode('grid')}
                   >
                     <Grid className="h-4 w-4" />
                   </button>
                   <button
-                    className={`p-2 ${viewMode === 'list' ? 'bg-blue-50 text-blue-600' : 'bg-white text-gray-500'}`}
+                    className={`p-2 ${viewMode === 'list' ? 'bg-orange-50 text-orange-600' : 'bg-white text-gray-500'}`}
                     onClick={() => setViewMode('list')}
                   >
                     <List className="h-4 w-4" />
@@ -349,8 +396,9 @@ const Venues = () => {
                   variant="outline" 
                   onClick={() => {
                     setSearchQuery('');
+                    setSelectedCity('');
                     setCapacity('');
-                    setPriceRange([0, 10000]);
+                    setPriceRange([0, 300000]);
                     setAmenities([]);
                     setSortBy('featured');
                     setFilteredVenues(venues);

@@ -113,17 +113,17 @@ const Index = () => {
         <SearchBar />
       </div>
       
-      {/* Popular Cities Section */}
-      <section className="py-16 px-6 bg-gradient-to-b from-orange-50 to-white">
+      {/* Popular Cities Section - Added more spacing (py-24) */}
+      <section className="py-24 px-6 bg-gradient-to-b from-orange-50 to-white">
         <div className="container mx-auto">
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Popular Destinations</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Discover perfect venues in India's most vibrant cities
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {popularCities.map((city, index) => (
               <div
                 key={city}
@@ -147,55 +147,57 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Featured Venues */}
-      <FeaturedVenues />
+      {/* Featured Venues - Added more spacing (py-24) */}
+      <section className="py-24">
+        <FeaturedVenues />
+      </section>
       
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50 px-6">
+      {/* How It Works - Added more spacing (py-24) */}
+      <section className="py-24 bg-gray-50 px-6">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">How It Works</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Finding and booking your perfect venue has never been easier
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto">
             {/* Step 1 */}
             <div className="relative bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300">
               <div className="absolute top-4 right-4 h-12 w-12 flex items-center justify-center bg-orange-100 text-orange-500 rounded-full font-bold">1</div>
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-6">
                 <Search className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Search</h3>
+              <h3 className="text-xl font-semibold mb-4">Search</h3>
               <p className="text-gray-600">Browse our curated selection of premium Indian venues or search by location and requirements</p>
             </div>
             
             {/* Step 2 */}
             <div className="relative bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300">
               <div className="absolute top-4 right-4 h-12 w-12 flex items-center justify-center bg-orange-100 text-orange-500 rounded-full font-bold">2</div>
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-6">
                 <Camera className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Compare</h3>
+              <h3 className="text-xl font-semibold mb-4">Compare</h3>
               <p className="text-gray-600">View detailed information, photos, and reviews to find your perfect venue match</p>
             </div>
             
             {/* Step 3 */}
             <div className="relative bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300">
               <div className="absolute top-4 right-4 h-12 w-12 flex items-center justify-center bg-orange-100 text-orange-500 rounded-full font-bold">3</div>
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-500 rounded-full mb-6">
                 <Heart className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Book</h3>
+              <h3 className="text-xl font-semibold mb-4">Book</h3>
               <p className="text-gray-600">Secure your venue with instant booking and receive immediate confirmation</p>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Features Section */}
-      <section className="py-20 px-6" ref={featuresRef}>
+      {/* Features Section - Added more spacing (py-28) */}
+      <section className="py-28 px-6" ref={featuresRef}>
         <div className="container mx-auto">
           <motion.div 
             variants={containerVariants}
@@ -207,16 +209,16 @@ const Index = () => {
             <motion.div variants={itemVariants}>
               <span className="inline-block px-3 py-1 mb-4 text-xs font-medium bg-orange-100 text-orange-600 rounded-full">FEATURES</span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Choose VenueHub?</h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 mb-10">
                 We've reimagined the venue booking experience in India from the ground up to make it simpler, faster, and more reliable.
               </p>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {features.map((feature, index) => (
                   <div key={index} className="flex">
                     <div className="flex-shrink-0 mt-1">{feature.icon}</div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-semibold mb-1">{feature.title}</h3>
+                      <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                       <p className="text-gray-600">{feature.description}</p>
                     </div>
                   </div>
@@ -224,7 +226,7 @@ const Index = () => {
               </div>
               
               <Button 
-                className="mt-8 bg-orange-500 hover:bg-orange-600"
+                className="mt-10 bg-orange-500 hover:bg-orange-600"
                 onClick={() => navigate('/venues')}
               >
                 Explore All Venues
@@ -233,7 +235,7 @@ const Index = () => {
             
             {/* Right Column - Testimonials */}
             <motion.div variants={itemVariants} className="flex flex-col justify-center">
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {testimonials.map((testimonial, index) => (
                   <div 
                     key={index} 
@@ -260,18 +262,18 @@ const Index = () => {
         </div>
       </section>
       
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-500 py-20 px-6">
+      {/* CTA Section - Added more spacing (py-28) */}
+      <section className="bg-gradient-to-r from-orange-600 to-red-500 py-28 px-6">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Find Your Perfect Venue?</h2>
-          <p className="text-orange-100 max-w-2xl mx-auto mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">Ready to Find Your Perfect Venue?</h2>
+          <p className="text-orange-100 max-w-2xl mx-auto mb-12 text-lg">
             Join thousands of event planners across India who have successfully booked their ideal venues through VenueHub
           </p>
           <Button 
             size="lg" 
             variant="secondary"
             onClick={() => navigate('/venues')}
-            className="bg-white text-orange-600 hover:bg-orange-50"
+            className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg"
           >
             Start Exploring Today
           </Button>

@@ -1,13 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, isAdmin, user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,15 +53,53 @@ const Navbar = () => {
             <Link to="/" className="text-gray-700 hover:text-blue-500 transition-colors">Home</Link>
             <Link to="/venues" className="text-gray-700 hover:text-blue-500 transition-colors">Venues</Link>
             <Link to="/booking" className="text-gray-700 hover:text-blue-500 transition-colors">Book Now</Link>
-            <Link to="/dashboard" className="text-gray-700 hover:text-blue-500 transition-colors">Dashboard</Link>
+            {isAuthenticated && (
+              <Link 
+                to={isAdmin ? "/admin" : "/dashboard"} 
+                className="text-gray-700 hover:text-blue-500 transition-colors"
+              >
+                {isAdmin ? "Admin" : "Dashboard"}
+              </Link>
+            )}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4 animate-fade-in">
-            <Button variant="outline" size="sm" className="animate-slide-down" style={{ animationDelay: '100ms' }}>
-              <Search className="h-4 w-4 mr-2" /> Find Venue
+            <Button variant="outline" size="sm" asChild className="animate-slide-down" style={{ animationDelay: '100ms' }}>
+              <Link to="/venues">
+                <Search className="h-4 w-4 mr-2" /> Find Venue
+              </Link>
             </Button>
-            <Button size="sm" className="animate-slide-down" style={{ animationDelay: '200ms' }}>Book Now</Button>
+            
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="ghost" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    {user?.name.split(' ')[0]}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to={isAdmin ? "/admin" : "/dashboard"}>
+                      {isAdmin ? "Admin Dashboard" : "Dashboard"}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/booking">My Bookings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="text-red-500">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button size="sm" asChild className="animate-slide-down" style={{ animationDelay: '200ms' }}>
+                <Link to="/login">Login</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -70,8 +117,32 @@ const Navbar = () => {
             <Link to="/" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Home</Link>
             <Link to="/venues" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Venues</Link>
             <Link to="/booking" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Book Now</Link>
-            <Link to="/dashboard" className="block text-gray-700 hover:text-blue-500 py-2 transition-colors">Dashboard</Link>
-            <Button className="w-full mt-4">Book Now</Button>
+            
+            {isAuthenticated ? (
+              <>
+                <Link 
+                  to={isAdmin ? "/admin" : "/dashboard"} 
+                  className="block text-gray-700 hover:text-blue-500 py-2 transition-colors"
+                >
+                  {isAdmin ? "Admin Dashboard" : "Dashboard"}
+                </Link>
+                <button 
+                  onClick={logout}
+                  className="flex items-center text-red-500 hover:text-red-600 py-2 transition-colors"
+                >
+                  <LogOut className="h-4 w-4 mr-2" /> Logout
+                </button>
+              </>
+            ) : (
+              <div className="flex space-x-3 pt-2">
+                <Button asChild>
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/signup">Sign Up</Link>
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

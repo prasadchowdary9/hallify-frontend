@@ -4,7 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 import Hero from '@/components/Hero';
 import SearchBar from '@/components/SearchBar';
 import FeaturedVenues from '@/components/FeaturedVenues';
-import { CheckCircle, Calendar, MapPin, Users, Star, Heart, Camera } from 'lucide-react';
+import { CheckCircle, Calendar, MapPin, Users, Star, Heart, Camera, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { getPopularCities } from '@/lib/data';

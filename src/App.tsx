@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Index from "./pages/Index";
 import Venues from "./pages/Venues";
@@ -91,17 +91,15 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow pt-24"> {/* Added padding-top to account for fixed navbar */}
-                <AppRoutes />
-              </main>
-              <Footer />
-            </div>
-          </AuthProvider>
-        </BrowserRouter>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-grow pt-24"> {/* Added padding-top to account for fixed navbar */}
+              <AppRoutes />
+            </main>
+            <Footer />
+          </div>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

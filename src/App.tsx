@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AddVenueForm from "./components/admin/AddVenueForm";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,16 @@ const AppRoutes = () => {
       <Route path="/admin" element={
         <AdminRoute>
           <AdminDashboard />
+        </AdminRoute>
+      } />
+      
+      {/* Admin specific routes */}
+      <Route path="/admin/add-venue" element={
+        <AdminRoute>
+          <div className="container mx-auto py-10 px-6">
+            <h1 className="text-3xl font-bold mb-8">Add New Venue</h1>
+            <AddVenueForm />
+          </div>
         </AdminRoute>
       } />
       

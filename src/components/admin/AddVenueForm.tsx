@@ -49,11 +49,14 @@ const venueFormSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
 });
 
+// Define the type for the form values
+type VenueFormValues = z.infer<typeof venueFormSchema>;
+
 const AddVenueForm = () => {
   const navigate = useNavigate();
   
   // Initialize form
-  const form = useForm<z.infer<typeof venueFormSchema>>({
+  const form = useForm<VenueFormValues>({
     resolver: zodResolver(venueFormSchema),
     defaultValues: {
       name: "",
@@ -64,14 +67,14 @@ const AddVenueForm = () => {
       zipCode: "",
       capacity: 1,
       pricePerHour: 500,
-      amenities: "",
-      images: "",
+      amenities: "", // This is a string that will be transformed to an array on submit
+      images: "",    // This is a string that will be transformed to an array on submit
       category: "",
     },
   });
 
   // Form submission handler
-  const onSubmit = async (values: z.infer<typeof venueFormSchema>) => {
+  const onSubmit = async (values: VenueFormValues) => {
     try {
       const venueData: Venue = {
         name: values.name,
@@ -83,7 +86,7 @@ const AddVenueForm = () => {
         capacity: values.capacity,
         pricePerHour: values.pricePerHour,
         amenities: values.amenities, // This is now an array after transformation
-        images: values.images, // This is now an array after transformation
+        images: values.images,       // This is now an array after transformation
         category: values.category,
         isAvailable: true,
         rating: 0,

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { VENUE_ENDPOINTS } from './ApiEndpoints';
 import { toast } from 'sonner';
-import { venues } from '@/lib/data';
+import { venues as localVenues } from '@/lib/data';
 
 // Define venue type
 export interface Venue {
@@ -23,6 +23,27 @@ export interface Venue {
   isAvailable?: boolean;
 }
 
+// Convert local venue format to our API venue format
+const convertLocalVenueToApiVenue = (localVenue: any): Venue => {
+  return {
+    id: localVenue.id,
+    name: localVenue.name,
+    description: localVenue.description || "",
+    address: localVenue.location || "",
+    city: localVenue.city || "",
+    state: localVenue.city ? localVenue.city.split(",")[1]?.trim() || "" : "",
+    zipCode: "",
+    capacity: localVenue.capacity || 0,
+    pricePerHour: localVenue.price ? Math.round(localVenue.price / 100) : 0,
+    amenities: localVenue.amenities || [],
+    images: localVenue.images || [localVenue.image].filter(Boolean),
+    category: "wedding", // Default category
+    rating: localVenue.rating || 0,
+    reviews: localVenue.reviewCount || 0,
+    isAvailable: true
+  };
+};
+
 // Get all venues
 export const getAllVenues = async (): Promise<Venue[]> => {
   try {
@@ -31,7 +52,8 @@ export const getAllVenues = async (): Promise<Venue[]> => {
   } catch (error) {
     console.error('Error fetching venues:', error);
     toast.error('Failed to fetch venues from server. Using local data.');
-    return venues; // Fallback to local data
+    // Convert local venue data to match our API venue format
+    return localVenues.map(convertLocalVenueToApiVenue);
   }
 };
 
@@ -44,7 +66,8 @@ export const getVenueById = async (id: string): Promise<Venue | null> => {
     console.error(`Error fetching venue ${id}:`, error);
     toast.error('Failed to fetch venue details from server. Using local data.');
     // Find venue in local data as fallback
-    return venues.find(venue => venue.id === id) || null;
+    const localVenue = localVenues.find(venue => venue.id === id);
+    return localVenue ? convertLocalVenueToApiVenue(localVenue) : null;
   }
 };
 

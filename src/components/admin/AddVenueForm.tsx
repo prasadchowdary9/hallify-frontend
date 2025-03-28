@@ -44,8 +44,8 @@ const venueFormSchema = z.object({
   zipCode: z.string().min(5, { message: "Valid ZIP code is required" }),
   capacity: z.coerce.number().min(1, { message: "Capacity must be at least 1" }),
   pricePerHour: z.coerce.number().min(1, { message: "Price must be at least ₹1" }),
-  amenities: z.string().transform(str => str.split(',').map(item => item.trim())),
-  images: z.string().transform(str => str.split(',').map(item => item.trim())),
+  amenities: z.string().transform(str => str.split(',').map(item => item.trim()).filter(Boolean)),
+  images: z.string().transform(str => str.split(',').map(item => item.trim()).filter(Boolean)),
   category: z.string().min(1, { message: "Category is required" }),
 });
 
@@ -74,7 +74,17 @@ const AddVenueForm = () => {
   const onSubmit = async (values: z.infer<typeof venueFormSchema>) => {
     try {
       const venueData: Venue = {
-        ...values,
+        name: values.name,
+        description: values.description,
+        address: values.address,
+        city: values.city,
+        state: values.state,
+        zipCode: values.zipCode,
+        capacity: values.capacity,
+        pricePerHour: values.pricePerHour,
+        amenities: values.amenities, // This is now an array after transformation
+        images: values.images, // This is now an array after transformation
+        category: values.category,
         isAvailable: true,
         rating: 0,
         reviews: 0,

@@ -3,7 +3,7 @@ import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { createVenue, Venue } from '@/api/venueService';
+import { createVenue } from '@/api/venueService';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -49,14 +49,11 @@ const venueFormSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
 });
 
-// Define the type for the form values
-type VenueFormValues = z.infer<typeof venueFormSchema>;
-
 const AddVenueForm = () => {
   const navigate = useNavigate();
   
   // Initialize form
-  const form = useForm<VenueFormValues>({
+  const form = useForm({
     resolver: zodResolver(venueFormSchema),
     defaultValues: {
       name: "",
@@ -67,16 +64,16 @@ const AddVenueForm = () => {
       zipCode: "",
       capacity: 1,
       pricePerHour: 500,
-      amenities: "", // This is a string that will be transformed to an array on submit
-      images: "",    // This is a string that will be transformed to an array on submit
+      amenities: "",  // String input that will be transformed to array on submit
+      images: "",     // String input that will be transformed to array on submit
       category: "",
     },
   });
 
   // Form submission handler
-  const onSubmit = async (values: VenueFormValues) => {
+  const onSubmit = async (values) => {
     try {
-      const venueData: Venue = {
+      const venueData = {
         name: values.name,
         description: values.description,
         address: values.address,

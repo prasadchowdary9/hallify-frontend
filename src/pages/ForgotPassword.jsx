@@ -89,9 +89,7 @@ const ForgotPassword = () => {
             <div className="text-center space-y-6">
               <div className="bg-green-50 text-green-800 p-4 rounded-lg">
                 <p>Reset instructions sent to your email!</p>
-                <p className="text-sm mt-2">
-                  (Since this is a demo, no actual email is sent)
-                </p>
+                
               </div>
               
               <Button 

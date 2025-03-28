@@ -124,13 +124,13 @@ const Login = () => {
             </p>
           </div>
 
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <p className="text-xs text-gray-500 text-center">
               <span className="font-semibold">Demo accounts:</span><br />
               User: user@example.com / password123<br />
               Admin: admin@example.com / admin123
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

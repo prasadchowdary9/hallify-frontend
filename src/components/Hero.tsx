@@ -4,12 +4,25 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import image1 from "../assets/home/beach.jfif";
+import image2 from "../assets/home/beatuy.jpg";
+// import image3 from "../assets/home/jaipur.jpg";
+import image4 from "../assets/home/marriage.jpg";
+import image5 from "../assets/home/seataj.webp";
+import image6 from "../assets/home/tajmahal.jfif";
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1556202964-70dc73c21c57?q=80&w=2070", // Taj Mahal reflection
-  "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=2071", // Hawa Mahal
-  "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=2070", // Decorated wedding venue
-  "https://images.unsplash.com/photo-1598386651573-9232cc0c2d6c?q=80&w=2070", // Indian wedding mandap
+  // "https://images.unsplash.com/photo-1556202964-70dc73c21c57?q=80&w=2070", // Taj Mahal reflection
+  // "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=2071", // Hawa Mahal
+  // "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=2070", // Decorated wedding venue
+  // "https://images.unsplash.com/photo-1598386651573-9232cc0c2d6c?q=80&w=2070", // Indian wedding mandap
+   image1, // Beach wedding
+ image2, // Beautiful wedding venue
+//  image3, // Jaipur
+  image4, // Marriage
+   image5, // Sea Taj
+  image6, // Taj Mahal
+
 ];
 
 const Hero = () => {
@@ -27,7 +40,7 @@ const Hero = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
-      opacity: 1,
+      opacity: 2,
       transition: {
         delayChildren: 0.3,
         staggerChildren: 0.2
@@ -39,8 +52,8 @@ const Hero = () => {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+      opacity: 2,
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
     }
   };
 
@@ -115,7 +128,7 @@ const Hero = () => {
       </div>
 
       {/* City Quick Links */}
-      <div className="absolute bottom-20 left-0 right-0 z-10">
+      {/* <div className="absolute bottom-20 left-0 right-0 z-10">
         <div className="container mx-auto px-6">
           <div className="flex overflow-x-auto pb-4 no-scrollbar">
             <div className="flex space-x-4">
@@ -132,7 +145,7 @@ const Hero = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Indicator Dots */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2 z-10">

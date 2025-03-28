@@ -1,10 +1,14 @@
 
 import React from 'react';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, MapPin, Heart, Clock, Bell, User, CalendarCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {BOOKING_ENDPOINTS} from "../api/ApiEndpoints";
+
 
 const UserDashboard = () => {
   const { user } = useAuth();
@@ -30,6 +34,21 @@ const UserDashboard = () => {
     }
   ];
 
+  const UserBookings = (userId: string) => {
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    if (userId) {
+      axios.get(BOOKING_ENDPOINTS.GET_BY_ID(userId)) .then(response => setBookings(response.data))
+        .catch(error => console.error('Error fetching bookings:', error));
+    }
+  }, [userId]);
+
+  return bookings;
+};
+
+  const bookings = UserBookings(user?.id);
+
   return (
     <div className="container mx-auto py-10 px-6">
       {/* Header */}
@@ -46,9 +65,9 @@ const UserDashboard = () => {
             <CardDescription>Your scheduled venue bookings</CardDescription>
           </CardHeader>
           <CardContent>
-            {upcomingBookings.length > 0 ? (
+            {bookings.length > 0 ? (
               <div className="space-y-4">
-                {upcomingBookings.map((booking) => (
+                {bookings.map((booking) => (
                   <div key={booking.id} className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border rounded-lg">
                     <div className="mb-3 md:mb-0">
                       <h3 className="font-semibold">{booking.venue}</h3>
@@ -139,7 +158,7 @@ const UserDashboard = () => {
         </Card>
       </div>
 
-      {/* Recent Activity */}
+      {/* Recent Activity
       <div className="mb-10">
         <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
         <div className="bg-gray-50 rounded-lg p-4">
@@ -164,7 +183,7 @@ const UserDashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Special Offers */}
       <div>

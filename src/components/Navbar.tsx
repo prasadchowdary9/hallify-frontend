@@ -41,12 +41,17 @@ const Navbar = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link 
-            to="/" 
-            className="text-2xl font-semibold tracking-tight animate-fade-in"
-          >
-            Venue<span className="text-blue-500">Hub</span>
-          </Link>
+        <Link 
+  to="/" 
+  className="text-3xl font-extrabold tracking-wide animate-fade-in 
+             bg-gradient-to-r from-red-500 via-blue-500 to-purple-500 
+             text-transparent bg-clip-text transition duration-300 
+             hover:scale-110 drop-shadow-lg"
+>
+  Venue<span className="text-blue-600">Hub</span>
+</Link>
+
+
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-10">

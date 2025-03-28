@@ -8,6 +8,23 @@ import { CheckCircle, Calendar, MapPin, Users, Star, Heart, Camera, Search } fro
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { getPopularCities } from '@/lib/data';
+// Import city images from assets
+import hyderabadImg from "../assets/cities/hyderabad.png";
+import chennaiImg from "../assets/cities/chennai.png";
+
+import mumbaiImg from "../assets/cities/mumbai.png";
+import delhiImg from "../assets/cities/delhi.png";
+import bangaloreImg from "../assets/cities/bangalore.png";
+
+// Map cities to images
+const cityImages = {
+  Hyderabad: hyderabadImg,
+  Chennai: chennaiImg,
+  Mumbai: mumbaiImg,
+  Delhi: delhiImg,
+  Bangalore: bangaloreImg,
+};
+
 
 const features = [
   {
@@ -114,46 +131,45 @@ const Index = () => {
       </div>
       
       {/* Popular Cities Section - Added more spacing (py-24) */}
-      <section className="py-24 px-6 bg-gradient-to-b from-orange-50 to-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Popular Destinations</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Discover perfect venues in India's most vibrant cities
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {popularCities.map((city, index) => (
-              <div
-                key={city}
-                className="relative overflow-hidden rounded-lg aspect-square shadow-md cursor-pointer hover:shadow-xl transition-all duration-300 group"
-                onClick={() => navigate(`/venues?city=${city}`)}
-              >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ 
-                    backgroundImage: `url(https://source.unsplash.com/featured/?${city},india${index})` 
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="font-bold text-xl">{city}</h3>
-                  <p className="text-sm opacity-80">Explore venues</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <section className="py-12 px-4 bg-gradient-to-b from-orange-50 to-white">
+      <div className="container mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">Popular Destinations</h2>
+          <p className="text-gray-600 max-w-xl mx-auto">
+            Discover perfect venues in India's top cities.
+          </p>
         </div>
-      </section>
-      
+
+        {/* City Icons Grid */}
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+          {popularCities.map((city) => (
+            <div
+              key={city}
+              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
+              onClick={() => navigate(`/venues?city=${city}`)}
+            >
+              {/* City Icon */}
+              <img src={cityImages[city]} alt={city} className="w-16 h-16 md:w-20 md:h-20" />
+              
+              {/* City Name */}
+              <h3 className="text-sm md:text-base font-medium mt-2">{city}</h3>
+              <p ></p>
+                
+                {/* Star Rating */}
+            </div>
+
+
+          ))}
+        </div>
+      </div>
+    </section>
       {/* Featured Venues - Added more spacing (py-24) */}
-      <section className="py-24">
+      <section className="py-10 ">
         <FeaturedVenues />
       </section>
       
       {/* How It Works - Added more spacing (py-24) */}
-      <section className="py-24 bg-gray-50 px-6">
+      <section className="py- bg-gray-50 px-6">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">How It Works</h2>

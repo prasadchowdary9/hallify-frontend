@@ -10,6 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Calendar } from '@/components/ui/calendar';
+import axios from 'axios';
+import {BOOKING_ENDPOINTS} from "../api/ApiEndpoints";
 import { 
   Select,
   SelectContent,
@@ -19,6 +21,22 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, Calendar as CalendarIcon, CheckCircle } from 'lucide-react';
+
+
+
+const useUserBookings = (userId) => {
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    if (userId) {
+      axios.get(BOOKING_ENDPOINTS.GET_BY_ID(userId))
+        .then(response => setBookings(response.data))
+        .catch(error => console.error('Error fetching bookings:', error));
+    }
+  }, [userId]);
+
+  return bookings;
+};
 
 const Booking = () => {
   const navigate = useNavigate();

@@ -27,8 +27,14 @@ const convertLocalVenueToApiVenue = (localVenue) => {
 
 // Get all venues
 export const getAllVenues = async () => {
+   const token = localStorage.getItem('token'); // Assuming token is saved in localStorage after login
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,  // Add Bearer token in the Authorization header
+    },
+  };
   try {
-    const response = await axios.get(VENUE_ENDPOINTS.GET_ALL);
+    const response = await axios.get(VENUE_ENDPOINTS.GET_ALL,config);
     return response.data;
   } catch (error) {
     console.error('Error fetching venues:', error);
@@ -40,8 +46,14 @@ export const getAllVenues = async () => {
 
 // Get venue by ID
 export const getVenueById = async (id) => {
+   const token = localStorage.getItem('token'); // Assuming token is saved in localStorage after login
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,  // Add Bearer token in the Authorization header
+    },
+  };
   try {
-    const response = await axios.get(VENUE_ENDPOINTS.GET_BY_ID(id));
+    const response = await axios.get(VENUE_ENDPOINTS.GET_BY_ID(id),config);
     return response.data;
   } catch (error) {
     console.error(`Error fetching venue ${id}:`, error);
@@ -53,9 +65,28 @@ export const getVenueById = async (id) => {
 };
 
 // Create new venue
+// export const createVenue = async (venueData) => {
+//   try {
+//     const response = await axios.post(VENUE_ENDPOINTS.CREATE, venueData);
+//     toast.success('Venue created successfully!');
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error creating venue:', error);
+//     toast.error('Failed to create venue. Please try again.');
+//     throw error;
+//   }
+// };
+
 export const createVenue = async (venueData) => {
+  const token = localStorage.getItem('token'); // Assuming token is saved in localStorage after login
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,  // Add Bearer token in the Authorization header
+    },
+  };
+
   try {
-    const response = await axios.post(VENUE_ENDPOINTS.CREATE, venueData);
+    const response = await axios.post(VENUE_ENDPOINTS.CREATE, venueData, config);
     toast.success('Venue created successfully!');
     return response.data;
   } catch (error) {

@@ -10,6 +10,26 @@ const FeaturedVenues = () => {
   const navigate = useNavigate();
   const featuredVenues = getFeaturedVenues();
 
+ 
+  // const [featuredVenues, setFeaturedVenues] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchFeaturedVenues = async () => {
+  //     try {
+  //       const response = await axios.get('http://your-backend-url/api/venues/featured'); // Update with your actual API endpoint
+  //       setFeaturedVenues(response.data);
+  //     } catch (err) {
+  //       setError('Failed to load featured venues. Please try again later.');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchFeaturedVenues();
+  // }, []);
+
   return (
     <section className="py-20 px-6 bg-white">
       <div className="container mx-auto">

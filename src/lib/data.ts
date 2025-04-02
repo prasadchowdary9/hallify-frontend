@@ -166,6 +166,8 @@ export const venues: Venue[] = [
           { time: "Morning", available: false },
           { time: "Afternoon", available: true },
           { time: "Evening", available: true },
+
+          
         ],
       },
     ],

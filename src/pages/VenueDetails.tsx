@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
+import axios from 'axios';
 
 const VenueDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,16 @@ const VenueDetails = () => {
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [isLiked, setIsLiked] = useState(false);
+
+  // useEffect(() => {
+  //   axios.get(`http://your-backend-url/api/venues/${id}`)
+  //     .then(response => setVenue(response.data))
+  //     .catch(() => navigate('/venues')); // Redirect if venue not found
+  // }, [id, navigate]);
+
+  // if (!venue) {
+  //   return <p>Loading...</p>; // Show a loading message before redirect
+  // }
   
   useEffect(() => {
     if (!venue) {

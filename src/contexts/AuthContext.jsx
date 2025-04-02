@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -5,13 +6,20 @@ import { toast } from "sonner";
 import { USER_ENDPOINTS } from '../api/ApiEndpoints'; // Import user endpoints
 import clsx from 'clsx';
 import { ClipboardSignature } from 'lucide-react';
-import { use } from 'react';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  // Dummy admin data for testing
+  const dummyAdmin = {
+    id: 1,
+    name: 'Admin User',
+    email: 'admin@example.com',
+    role: 'ROLE_ADMIN',
+  };
 
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
@@ -23,32 +31,30 @@ export const AuthProvider = ({ children }) => {
         console.error('Failed to parse user from localStorage', error);
         localStorage.removeItem('user');
       }
+    } else {
+      // If no user is found, use dummy admin for testing
+      setUser(dummyAdmin);
+      localStorage.setItem('user', JSON.stringify(dummyAdmin));
+      localStorage.setItem('token', 'dummy-jwt-token'); // Use a dummy token for testing
     }
   }, []);
 
   // Login function
   const login = async (email, password) => {
-    console.log("login method called")
     try {
-      const response = await axios.post(USER_ENDPOINTS.LOGIN, { email, password });
-      const { token, user } = response.data;
-
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token); // Store JWT token
-      localStorage.setItem('userId', user.id); // Store user ID
-      localStorage.setItem('userRole', user.role); // Store user role
-      localStorage.setItem('userName', user.name); // Store user name
-      localStorage.setItem('userEmail', user.email); // Store user email
-      
-      
-
-      setUser(user);
-      console.log(JSON.stringify(user))
-      toast.success(`Welcome back, ${user.name}!`);
-      navigate('/dashboard');
+      // Simulate successful login (mock admin)
+      if (email === 'admin@example.com' && password === 'admin123') {
+        localStorage.setItem('user', JSON.stringify(dummyAdmin));
+        localStorage.setItem('token', 'dummy-jwt-token'); // Store dummy JWT token
+        setUser(dummyAdmin);
+        toast.success(`Welcome back, ${dummyAdmin.name}!`);
+        navigate('/dashboard');
+      } else {
+        toast.error("Invalid credentials");
+      }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
-      throw new Error(error.response?.data?.message || 'Invalid credentials');
+      toast.error("Login failed");
+      throw new Error('Login failed');
     }
   };
 
@@ -91,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAuthenticated = !!user;
-  const isAdmin = user?.role === 'ROLE_ADMIN'; // Adjust based on your role naming convention
+  const isAdmin = user?.role === 'ROLE_ADMIN'; // Check if the user has admin role
 
   return (
     <AuthContext.Provider 
@@ -117,6 +123,127 @@ export const useAuth = () => {
   }
   return context;
 };
+
+
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import { toast } from "sonner";
+// import { USER_ENDPOINTS } from '../api/ApiEndpoints'; // Import user endpoints
+// import clsx from 'clsx';
+// import { ClipboardSignature } from 'lucide-react';
+// import { use } from 'react';
+
+// const AuthContext = createContext(undefined);
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const navigate = useNavigate();
+
+//   // Check if user is already logged in (from localStorage)
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem('user');
+//     if (storedUser) {
+//       try {
+//         setUser(JSON.parse(storedUser));
+//       } catch (error) {
+//         console.error('Failed to parse user from localStorage', error);
+//         localStorage.removeItem('user');
+//       }
+//     }
+//   }, []);
+
+//   // Login function
+//   const login = async (email, password) => {
+//     console.log("login method called")
+//     try {
+//       const response = await axios.post(USER_ENDPOINTS.LOGIN, { email, password });
+//       const { token, user } = response.data;
+
+//       localStorage.setItem('user', JSON.stringify(user));
+//       localStorage.setItem('token', token); // Store JWT token
+//       localStorage.setItem('userId', user.id); // Store user ID
+//       localStorage.setItem('userRole', user.role); // Store user role
+//       localStorage.setItem('userName', user.name); // Store user name
+//       localStorage.setItem('userEmail', user.email); // Store user email
+      
+      
+
+//       setUser(user);
+//       console.log(JSON.stringify(user))
+//       toast.success(`Welcome back, ${user.name}!`);
+//       navigate('/dashboard');
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Login failed");
+//       throw new Error(error.response?.data?.message || 'Invalid credentials');
+//     }
+//   };
+
+//   // Signup function
+//   const signup = async (name, email, password) => {
+//     try {
+//       const response = await axios.post(USER_ENDPOINTS.SIGNUP, { name, email, password });
+//       const { token, user } = response.data;
+
+//       localStorage.setItem('user', JSON.stringify(user));
+//       localStorage.setItem('token', token); // Store JWT token
+
+//       setUser(user);
+//       toast.success("Account created successfully!");
+//       navigate('/dashboard');
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Signup failed");
+//       throw new Error(error.response?.data?.message || 'Signup error');
+//     }
+//   };
+
+//   // Logout function
+//   const logout = () => {
+//     setUser(null);
+//     localStorage.removeItem('user');
+//     localStorage.removeItem('token'); // Remove JWT token
+//     toast.success("Logged out successfully");
+//     navigate('/');
+//   };
+
+//   // Reset password function
+//   const resetPassword = async (email) => {
+//     try {
+//       await axios.post(USER_ENDPOINTS.RESET_PASSWORD, { email });
+//       toast.success("Password reset link sent to your email");
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Email not found");
+//       throw new Error(error.response?.data?.message || 'Reset password error');
+//     }
+//   };
+
+//   const isAuthenticated = !!user;
+//   const isAdmin = user?.role === 'ROLE_ADMIN'; // Adjust based on your role naming convention
+
+//   return (
+//     <AuthContext.Provider 
+//       value={{ 
+//         user, 
+//         isAuthenticated, 
+//         isAdmin,
+//         login, 
+//         signup, 
+//         logout, 
+//         resetPassword 
+//       }}
+//     >
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   const context = useContext(AuthContext);
+//   if (context === undefined) {
+//     throw new Error('useAuth must be used within an AuthProvider');
+//   }
+//   return context;
+// };
 
 
 // import React, { createContext, useContext, useState, useEffect } from 'react';

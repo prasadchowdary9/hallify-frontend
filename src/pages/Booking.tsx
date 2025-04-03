@@ -123,6 +123,47 @@ const Booking = () => {
         });
         return;
       }
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        toast({
+          title: "User not authenticated",
+          description: "Please log in to proceed with your booking.",
+          variant: "destructive",
+        });
+        return;
+      }
+      // const bookingData = {
+      //   ...formData,
+      //   userId,
+      //   venueId: venue.id,
+      // };
+      // // Send booking data to the server  
+
+      // // Assuming you have an API endpoint to create a booking
+      // // Replace with your actual API call
+      // axios.post(BOOKING_ENDPOINTS.CREATE, bookingData)
+      //   .then(response => { 
+      //     console.log('Booking created:', response.data);
+      //     toast({
+      //       title: "Booking successful!",
+      //       description: "Your booking has been confirmed. You will receive an email confirmation shortly.",
+      //       variant: "success",
+      //     });
+      //     navigate('/dashboard');
+      //   })
+      //   .catch(error => {
+      //     console.error('Error creating booking:', error);
+      //     toast({
+      //       title: "Booking failed",
+      //       description: "There was an error processing your booking. Please try again.",
+      //       variant: "destructive",
+      //     });
+      //   });
+
+
+
+
+
       
       // Submit the booking
       toast({

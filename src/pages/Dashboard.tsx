@@ -26,6 +26,7 @@ import { toast } from '@/hooks/use-toast';
 
 const Dashboard = () => {
   const bookings = getUserBookings();
+  
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null);
   
   const toggleExpand = (id: string) => {

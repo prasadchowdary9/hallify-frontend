@@ -8,6 +8,7 @@ import { Calendar, MapPin, Heart, Clock, Bell, User, CalendarCheck } from 'lucid
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {BOOKING_ENDPOINTS} from "../api/ApiEndpoints";
+import { set } from 'date-fns';
 
 
 const UserDashboard = () => {
@@ -36,13 +37,37 @@ const UserDashboard = () => {
 
   const UserBookings = (userId: string) => {
   const [bookings, setBookings] = useState([]);
+  const token = localStorage.getItem('token');
+  // const userId = localStorage.getItem("useId"); // ✅ Get userId from the user object
 
   useEffect(() => {
-    if (userId) {
-      axios.get(BOOKING_ENDPOINTS.GET_BY_ID(userId)) .then(response => setBookings(response.data))
-        .catch(error => console.error('Error fetching bookings:', error));
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem("token"); // ✅ Retrieve token from local storage
+
+      if (!token) {
+        console.error("No token found.");
+        return;
+      }
+
+      const response = await axios.get(BOOKING_ENDPOINTS.GET_BY_USER(userId), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBookings(response.data);
+      console.log("Bookings fetched successfully:", response.data);
+    } catch (error) {
+      console.error("Error fetching bookings in user dashboard:", error, token, userId);
     }
-  }, [userId]);
+  };
+
+  if (userId) {
+    fetchBookings(); // ✅ Only call if userId exists
+  }
+}, [userId]);
+
 
   return bookings;
 };

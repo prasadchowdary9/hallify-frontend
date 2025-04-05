@@ -1,10 +1,11 @@
 
 // API base URL
-export const API_BASE_URL = "http://localhost:8081/api";
+export const API_BASE_URL = "http://userapi-env.eba-hep5n8bt.ap-south-1.elasticbeanstalk.com/api";
+const VENUE_BASE_URL = "http://venue-api-env-1.eba-8t33xurk.ap-south-1.elasticbeanstalk.com/api";
 
 // Venue endpoints
 export const VENUE_ENDPOINTS = {
-  GET_ALL: `${API_BASE_URL}/venues`,
+  GET_ALL: `${VENUE_BASE_URL}/venues`,
   GET_BY_ID: (id) => `${API_BASE_URL}/venues/${id}`,
   CREATE: `${API_BASE_URL}/venues`,
   UPDATE: (id) => `${API_BASE_URL}/venues/${id}`,
@@ -24,8 +25,11 @@ export const USER_ENDPOINTS = {
 export const BOOKING_ENDPOINTS = {
   GET_ALL: `${API_BASE_URL}/bookings/allbookings`,
   GET_BY_ID: (id) => `${API_BASE_URL}/bookings/user/${id}`,
-CREATE_BY_USER: (userId, venueId) => `${API_BASE_URL}/bookings/create/${userId}?venueId=${venueId}`,
-  UPDATE: (id) => `${API_BASE_URL}/bookings/${id}`,
+CREATE_BY_USER: (userId, venueId, bookingFormData) => ({
+  url: `${API_BASE_URL}/bookings/create/${userId}?venueId=${venueId}`,
+  data: bookingFormData,
+}),
+ UPDATE: (id) => `${API_BASE_URL}/bookings/${id}`,
   DELETE: (id) => `${API_BASE_URL}/bookings/${id}`,
   GET_BY_USER: (userId) => `${API_BASE_URL}/bookings/user/${userId}`,
   GET_BY_VENUE: (venueId) => `${API_BASE_URL}/bookings/venue/${venueId}`,

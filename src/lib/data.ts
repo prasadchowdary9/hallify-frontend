@@ -1,5 +1,9 @@
 import axios from "axios";
-
+import { BOOKING_ENDPOINTS } from "../api/apiEndpoints";
+import { useEffect } from "react";
+import clsx from "clsx";
+import Booking from "@/pages/Booking";
+import {VENUE_ENDPOINTS} from "@/api/apiEndpoints";
 export interface Venue {
   id: string;
   name: string;
@@ -29,7 +33,7 @@ export let venues: Venue[] = [];
 // Fetch venues from backend
 export const fetchVenues = async () => {
   try {
-    const response = await axios.get<Venue[]>("http://localhost:8082/api/venues");
+    const response = await axios.get<Venue[]>(VENUE_ENDPOINTS.GET_ALL);
     venues = response.data;
   } catch (error) {
     console.error("Error fetching venues:", error);
@@ -89,24 +93,38 @@ export interface Booking {
   totalPrice: number;
 }
 
+
 export const getUserBookings = async (): Promise<Booking[]> => {
   try {
-    const response = await axios.get<Booking[]>("http://localhost:8080/bookings");
-    return response.data;
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    console.log("token", token);
+    console.log("userId", userId);
+
+    if (!userId || !token) {
+      throw new Error("Missing user ID or token");
+    }
+
+    console.log("Calling booking API with: ", userId, token);
+
+    const response = await axios.get<Booking[]>(
+    BOOKING_ENDPOINTS.GET_BY_USER(userId),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Bookings received: ", response.data);
+    return response.data || [];
   } catch (error) {
-    console.error("Error fetching bookings:", error);
+    console.log("token", localStorage.getItem("token"));
+    console.log("userId", localStorage.getItem("userId"));
+    console.error("Error fetching bookings in data.ts :", error.response || error.message || error);
     return [];
   }
 };
-
-
-
-
-
-
-
-
-
 
 
 

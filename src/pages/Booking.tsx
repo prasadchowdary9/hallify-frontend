@@ -20,7 +20,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, Calendar as CalendarIcon, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Calendar as CalendarIcon, CheckCircle, ClipboardSignature } from 'lucide-react';
+import clsx from 'clsx';
 
 
 
@@ -28,14 +29,19 @@ const useUserBookings = (userId) => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    if (userId) {
-      axios.get(BOOKING_ENDPOINTS.GET_BY_ID(userId))
-        .then(response => setBookings(response.data))
-        .catch(error => console.error('Error fetching bookings:', error));
-    }
-  }, [userId]);
+  try {
+    axios
+      .get(BOOKING_ENDPOINTS.GET_BY_ID(userId))
+      .then((response) => setBookings(response.data))
+      .catch((error) =>
+        console.error("Error fetching bookings:", error)
+      );
+  } catch (error) {
+    console.error("Unexpected error in fetching bookings:", error);
+  }
+}, [userId]);
 
-  return bookings;
+return bookings;
 };
 
 const Booking = () => {
@@ -132,24 +138,71 @@ const Booking = () => {
         });
         return;
       }
-      // const bookingData = {
-      //   ...formData,
-      //   userId,
-      //   venueId: venue.id,
-      // };
-      // // Send booking data to the server  
+      const bookingData = {
+        ...formData
+        
+      };
+      // Send booking data to the server  
 
-      // // Assuming you have an API endpoint to create a booking
-      // // Replace with your actual API call
-      // axios.post(BOOKING_ENDPOINTS.CREATE, bookingData)
-      //   .then(response => { 
+      // Assuming you have an API endpoint to create a booking
+      // Replace with your actual API callconst token = localStorage.getItem('token');
+
+console.log('Booking data:', bookingData);
+const token = localStorage.getItem('token');
+console.log("venueId", venueId);
+console.log("userId", userId);
+console.log("venueid", venue.id);
+
+axios.post(
+  BOOKING_ENDPOINTS.CREATE_BY_USER(userId, venue.id).url,
+  bookingData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`, // 👈 Include the token here
+    },
+  }
+)
+  .then(response => {
+    console.log('Booking created:', response.data);
+    toast({
+  title: "Booking successful!",
+  description: "Your booking has been confirmed. You will receive an email confirmation shortly.",
+  variant: "custom",
+  style: {
+    backgroundColor: "#22c55e", // Tailwind green-500
+    color: "white",
+  },
+});
+
+    navigate('/dashboard'); // Redirect to the dashboard or booking confirmation page
+  })
+  .catch(error => {
+    console.log('Error creating booking:', error);
+    console.error('Error creating booking:', error);
+    toast({
+      
+      title: "Booking failed",
+      description: "There was an error processing your booking . Please try again.",
+      variant: "destructive",
+    });
+  });
+
+
+
+
+
+
+
+
+      // console.log('Booking data:', bookingData);
+      // axios.post(BOOKING_ENDPOINTS.CREATE_BY_USER(userId, venue.id).url, bookingData) .then(response => { 
       //     console.log('Booking created:', response.data);
       //     toast({
       //       title: "Booking successful!",
       //       description: "Your booking has been confirmed. You will receive an email confirmation shortly.",
       //       variant: "success",
       //     });
-      //     navigate('/dashboard');
+      //     navigate('/booking');
       //   })
       //   .catch(error => {
       //     console.error('Error creating booking:', error);
@@ -166,13 +219,13 @@ const Booking = () => {
 
       
       // Submit the booking
-      toast({
-        title: "Booking successful!",
-        description: "Your booking has been confirmed. You will receive an email confirmation shortly.",
-      });
+      // toast({
+      //   title: "Booking successful!",
+      //   description: "Your booking has been confirmed. You will receive an email confirmation shortly.",
+      // });
       
       // Navigate to confirmation/dashboard
-      navigate('/dashboard');
+      navigate('/booking');
     }
   };
   

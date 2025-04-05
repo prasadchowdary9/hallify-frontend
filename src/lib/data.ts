@@ -3,7 +3,7 @@ import { BOOKING_ENDPOINTS } from "../api/apiEndpoints";
 import { useEffect } from "react";
 import clsx from "clsx";
 import Booking from "@/pages/Booking";
-
+import {VENUE_ENDPOINTS} from "@/api/apiEndpoints";
 export interface Venue {
   id: string;
   name: string;
@@ -33,7 +33,7 @@ export let venues: Venue[] = [];
 // Fetch venues from backend
 export const fetchVenues = async () => {
   try {
-    const response = await axios.get<Venue[]>("http://localhost:8082/api/venues");
+    const response = await axios.get<Venue[]>(VENUE_ENDPOINTS.GET_ALL);
     venues = response.data;
   } catch (error) {
     console.error("Error fetching venues:", error);

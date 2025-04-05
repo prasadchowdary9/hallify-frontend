@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BOOKING_ENDPOINTS } from "../api/apiEndpoints";
+import { BOOKING_ENDPOINTS,VENUE_ENDPOINTS } from "../api/ApiEndpoints";
 import { useEffect } from "react";
 import clsx from "clsx";
 import Booking from "@/pages/Booking";
-import {VENUE_ENDPOINTS} from "@/api/apiEndpoints";
+// import {VENUE_ENDPOINTS} from "@/api/apiEndpoints";
 export interface Venue {
   id: string;
   name: string;

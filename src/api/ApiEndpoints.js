@@ -1,8 +1,11 @@
 
 // API base URL
-export const API_BASE_URL = "https://userapi-env.eba-hep5n8bt.ap-south-1.elasticbeanstalk.com/api";
+// export const API_BASE_URL = "https://userapi-env.eba-hep5n8bt.ap-south-1.elasticbeanstalk.com/api";
+export const API_BASE_URL = "https://hall-booking-system-xw9w.onrender.com/api"; 
+
 const VENUE_BASE_URL = "https://venue-api-env-1.eba-8t33xurk.ap-south-1.elasticbeanstalk.com/api";
 const VENUE_BASE_URL_RENDER = "https://venue-api-xsx6.onrender.com/api";
+// const API_BASE_URL_RENDER="https://hall-booking-system-xw9w.onrender.com/api";
 // Venue endpoints
 export const VENUE_ENDPOINTS = {
   GET_ALL: `${VENUE_BASE_URL_RENDER}/venues`,

@@ -34,6 +34,9 @@ export let venues: Venue[] = [];
 export const fetchVenues = async () => {
   try {
     const response = await axios.get<Venue[]>(VENUE_ENDPOINTS.GET_ALL);
+    console.log("Venues received: ", response.data);
+    // Store the fetched venues in the state variable
+      
     venues = response.data;
   } catch (error) {
     console.error("Error fetching venues:", error);
@@ -61,6 +64,29 @@ export const getVenue = (id: string): Venue | undefined => {
 export const getFeaturedVenues = (): Venue[] => {
   return venues.filter((venue) => venue.featured);
 };
+
+/**
+ * Get all cached venues.
+ */
+export function getAllVenues(): Venue[] {
+  return venues;
+}
+
+/**
+ * Get a single venue by ID.
+ */
+// export function getVenue(id: string): Venue | undefined {
+//   return venues.find((venue) => venue.id === id);
+// }
+
+/**
+ * Re-fetch venues and return a single venue by ID.
+ * Use this in case getVenue returns undefined.
+ */
+export async function refetchAndGetVenue(id: string): Promise<Venue | undefined> {
+  await fetchVenues();
+  return getVenue(id);
+}
 
 export const getVenuesByCity = (city: string): Venue[] => {
   return venues.filter((venue) => venue.city.toLowerCase() === city.toLowerCase());

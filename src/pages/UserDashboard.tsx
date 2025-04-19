@@ -97,9 +97,11 @@ const UserDashboard = () => {
                     <div className="mb-3 md:mb-0">
                       <h3 className="font-semibold">{booking.venue}</h3>
                       <div className="flex items-center text-sm text-gray-500 mt-1">
-                        <MapPin className="h-3 w-3 mr-1" />
+                        {/* <MapPin className="h-3 w-3 mr-1" /> */}
+                        
                         <span>{booking.city}</span>
-                      </div>
+                        <span className="ml-2 text-primary font-weight-bold">{booking.venueName}</span> 
+                        </div>
                     </div>
                     <div className="flex flex-wrap gap-3">
                       <div className="flex items-center text-sm bg-gray-100 px-2 py-1 rounded">
@@ -112,7 +114,7 @@ const UserDashboard = () => {
                       </div>
                       <div className="flex items-center text-sm bg-gray-100 px-2 py-1 rounded">
                         <User className="h-3 w-3 mr-1" />
-                        <span>{booking.guests} guests</span>
+                        <span>{booking.guestCount} guests</span>
                       </div>
                       <div className={`flex items-center text-sm px-2 py-1 rounded ${
                         booking.status === 'confirmed' 
@@ -120,7 +122,7 @@ const UserDashboard = () => {
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
                         <CalendarCheck className="h-3 w-3 mr-1" />
-                        <span>{booking.status}</span>
+                        <span>{"SUCCESS"}</span>
                       </div>
                     </div>
                   </div>
